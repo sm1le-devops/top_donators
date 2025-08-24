@@ -1,32 +1,50 @@
-# MyFastAPIApp_top_donators
+MyFastAPIApp_top_donators
+Description
 
-## Описание
-MyFastAPIApp — это веб-приложение на FastAPI с поддержкой регистрации и авторизации пользователей, возможностью доната, отправки писем на почту, управления профилем (смена пароля, email, аватара), а также защиты через CSRF токены и куки. Приложение использует MySQL для хранения данных и поддерживает логирование действий пользователей.
+MyFastAPIApp is a FastAPI-based web application with user registration and authentication, donation functionality, email notifications, profile management (password, email, and avatar updates), as well as CSRF token and cookie protection. The application uses MySQL for data storage and supports user activity logging.
 
-## Основные функции
-- Регистрация и логин пользователей
-- Смена пароля и email
-- Загрузка и изменение аватара пользователя
-- Поддержка нескольких страниц
-- Донаты
-- Отправка уведомлений на почту
-- CSRF защита
-- Работа с куками
-- Логирование действий пользователей
-- Подключение к базе данных MySQL
+👉 The website is available at: https://top-donators1.onrender.com
 
-## Используемые технологии
-- Python 3.11+
-- FastAPI
-- SQLAlchemy
-- MySQL
-- Docker (опционально для контейнеризации)
-- Ngrok (для локального вебхука)
-- Uvicorn (ASGI сервер)
+Key Features
 
-## Установка и запуск
+User registration and login
 
-### 1. Клонируйте репозиторий
-```bash
-git clone <URL_репозитория>
-cd <папка_проекта>
+Password and email change
+
+User avatar upload and update
+
+Multiple page support
+
+Donations
+
+Email notifications
+
+CSRF protection
+
+Cookie management
+
+User activity logging
+
+MySQL database integration
+
+Technologies Used
+
+Python 3.11+
+
+FastAPI
+
+SQLAlchemy
+
+MySQL
+
+Docker (optional, for containerization)
+
+Ngrok (for local webhooks)
+Installation and Launch
+1. Clone the repository
+git clone <repository_URL>
+cd <project_folder>
+
+Uvicorn (ASGI server)
+
+Installation and Launch
