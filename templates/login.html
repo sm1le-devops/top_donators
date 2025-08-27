@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login</title>
+  <link rel="icon" type="image/png" href="/static/ava.png">
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #6a11cb 0%, #8e44ad 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    /* Fade-in animation */
+    @keyframes fadeScale {
+      0% { opacity: 0; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    #container {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 30px 40px;
+      border-radius: 15px;
+      width: 320px;
+      box-sizing: border-box;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      animation: fadeScale 0.8s ease-out forwards;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(-20px);
+      animation: fadeScale 0.5s ease-out forwards;
+      animation-delay: 0.1s;
+    }
+
+    input, button, .link-button {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeScale 0.5s ease-out forwards;
+    }
+
+    input:nth-of-type(1) {
+      animation-delay: 0.2s;
+    }
+    input:nth-of-type(2) {
+      animation-delay: 0.3s;
+    }
+    button {
+      margin-top: 15px;
+      animation-delay: 0.4s;
+    }
+    .link-button {
+      display: block;
+      margin-top: 15px;
+      color: white;
+      text-decoration: underline;
+      cursor: pointer;
+      transition: text-shadow 0.3s ease;
+      animation-delay: 0.5s;
+    }
+
+    .link-button:hover {
+      text-shadow: 0 0 8px white;
+    }
+
+    input {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      background: #9b59b6;
+      font-size: 18px;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      box-shadow: 0 4px 10px rgba(155, 89, 182, 0.6);
+    }
+
+    button:hover {
+      background: #8e44ad;
+      box-shadow: 0 6px 14px rgba(142, 68, 173, 0.8);
+    }
+
+    #forgot-link {
+      display: none;
+    }
+
+    #message {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h2>Login</h2>
+    <form id="login-form" novalidate>
+      <input type="text" id="username" name="username" placeholder="Username" required />
+      <input type="password" id="password" name="password" placeholder="Password" required />
+      <input type="hidden" id="csrf_token" name="csrf_token" value="{{ csrf_token }}">
+      <button type="submit">Log In</button>
+    </form>
+    <p id="message"></p>
+    <a href="/auth/register" class="link-button" id="register-link">No account? Register</a>
+    <a href="/auth/forgot-password" class="link-button" id="forgot-link">Forgot password?</a>
+  </div>
+
+  <script>
+    const form = document.getElementById('login-form');
+    const messageEl = document.getElementById('message');
+    const forgotLink = document.getElementById('forgot-link');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const payload = {
+        username: form.username.value.trim(),
+        password: form.password.value.trim(),
+        csrf_token: form.csrf_token.value
+      };
+
+      try {
+        const res = await fetch('/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          credentials: 'include'
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          messageEl.textContent = '';
+          forgotLink.style.display = 'none';
+          window.location.href = data.redirect_url || '/auth/welcome';
+        } else {
+          messageEl.textContent = data.detail || 'Login error';
+          messageEl.style.color = 'red';
+          forgotLink.style.display = 'block';
+        }
+      } catch {
+        messageEl.textContent = 'Server connection error';
+        messageEl.style.color = 'red';
+        forgotLink.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

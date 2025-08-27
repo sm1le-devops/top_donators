@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>User Profile</title>
+  <link rel="icon" type="image/png" href="/static/ava.png">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #6a11cb 0%, #8e44ad 100%);
+      padding: 20px;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    #profile-container {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 20px 25px;
+      border-radius: 12px;
+      width: 350px;
+      box-shadow: 0 8px 20px rgba(122, 76, 224, 0.4);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-weight: 600;
+      color: #4a2e9e;
+    }
+
+    #avatar-wrapper {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      margin-bottom: 15px;
+      width: 90px;
+      height: 90px;
+    }
+
+    img.avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #7a4ce0;
+      display: block;
+    }
+
+    #avatar-overlay {
+      position: absolute;
+      top: 0; left: 0; width: 90px; height: 90px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      user-select: none;
+    }
+
+    #avatar-wrapper:hover #avatar-overlay {
+      opacity: 1;
+    }
+
+    form label {
+      display: block;
+      text-align: left;
+      margin-top: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      color: #4a2e9e;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 8px 12px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    input {
+      background: #e3dcff;
+      color: #4a2e9e;
+      transition: background-color 0.3s ease;
+    }
+
+    input::placeholder {
+      color: #9b8ed6;
+    }
+
+    input:focus {
+      background: #d0c1ff;
+      color: #3e228e;
+    }
+
+    button {
+      margin-top: 20px;
+      background: linear-gradient(135deg, #7a4ce0, #5a31b8);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(122, 76, 224, 0.6);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    button:hover:enabled {
+      background: linear-gradient(135deg, #5a31b8, #7a4ce0);
+      box-shadow: 0 8px 20px rgba(122, 76, 224, 0.8);
+    }
+
+    button:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    #logout-btn {
+      background: linear-gradient(135deg, #e03b3b, #b82323);
+      margin-top: 10px;
+    }
+
+    #logout-btn:hover {
+      background: linear-gradient(135deg, #b82323, #e03b3b);
+      box-shadow: 0 8px 20px rgba(224, 59, 59, 0.8);
+    }
+
+    #message {
+      margin-top: 15px;
+      min-height: 18px;
+      font-weight: 600;
+      color: #5a31b8;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 15px;
+      color: #7a4ce0;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #5a31b8;
+    }
+  </style>
+</head>
+<body>
+  <div id="profile-container">
+    <h2>Profile</h2>
+
+    <div id="avatar-wrapper" title="Change Photo">
+      <img src="{{ avatar_url or '/static/default-avatar.png' }}" alt="Avatar" class="avatar" id="avatar-preview" />
+      <label for="avatar" id="avatar-overlay">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="white" viewBox="0 0 24 24">
+          <path d="M12 17a5 5 0 100-10 5 5 0 000 10zm-6-9.9V7a1 1 0 011-1h1.2l.6-1.2A1 1 0 0110.6 4h2.8a1 1 0 01.9.6L15 6h1.2a1 1 0 011 1v.1M4 8h16v10a2 2 0 01-2 2H6a2 2 0 01-2-2V8z"/>
+        </svg>
+      </label>
+    </div>
+
+    <form id="profile-form" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+      <label>Username</label>
+      <input type="text" id="username" name="username" value="{{ current_user.username }}" required />
+
+      <label>Email</label>
+      <input type="email" id="email" name="email" value="{{ current_user.email }}" required />
+
+      <label>New password (leave blank to keep current)</label>
+      <input type="password" id="password" name="password" placeholder="New password" />
+
+      <input type="file" id="avatar" name="avatar" accept="image/*" style="display:none;" />
+
+      <button type="submit" id="save-button" disabled>Save Changes</button>
+      <button type="button" id="logout-btn">Logout</button>
+    </form>
+
+    <p id="message"></p>
+    <a href="/auth/welcome">Back</a>
+  </div>
+
+  <script>
+    const form = document.getElementById('profile-form');
+    const message = document.getElementById('message');
+    const avatarInput = document.getElementById('avatar');
+    const avatarPreview = document.getElementById('avatar-preview');
+    const logoutBtn = document.getElementById('logout-btn');
+    const saveButton = document.getElementById('save-button');
+
+    const initialUsername = document.getElementById('username').value;
+    const initialEmail = document.getElementById('email').value;
+
+    function containsCyrillic(str) {
+      return /[а-яё]/i.test(str);
+    }
+
+    function validatePassword(password) {
+      if (password.length < 8) {
+        return 'Password must be at least 8 characters.';
+      }
+      if (!/[a-z]/.test(password)) {
+        return 'Password must contain at least one lowercase letter.';
+      }
+      if (!/[0-9]/.test(password)) {
+        return 'Password must contain at least one number.';
+      }
+      if (containsCyrillic(password)) {
+        return 'Password must not contain Cyrillic letters.';
+      }
+      return '';
+    }
+
+    function validateFields() {
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      let error = '';
+
+      if (containsCyrillic(username)) {
+        error = 'Username must not contain Cyrillic characters.';
+      } else if (containsCyrillic(email)) {
+        error = 'Email must not contain Cyrillic characters.';
+      } else if (password.length > 0) {
+        error = validatePassword(password);
+      }
+
+      if (error) {
+        message.textContent = error;
+        message.style.color = '#d6336c';
+        saveButton.disabled = true;
+        return false;
+      } else {
+        message.textContent = '';
+        return true;
+      }
+    }
+
+    function checkChanges() {
+      if (!validateFields()) {
+        saveButton.disabled = true;
+        return;
+      }
+
+      const usernameChanged = document.getElementById('username').value !== initialUsername;
+      const emailChanged = document.getElementById('email').value !== initialEmail;
+      const passwordChanged = document.getElementById('password').value.length > 0;
+      const avatarChanged = avatarInput.files.length > 0;
+
+      saveButton.disabled = !(usernameChanged || emailChanged || passwordChanged || avatarChanged);
+    }
+
+    document.getElementById('username').addEventListener('input', onInputHandler);
+    document.getElementById('email').addEventListener('input', onInputHandler);
+    document.getElementById('password').addEventListener('input', onInputHandler);
+
+    function onInputHandler() {
+      if (validateFields()) {
+        checkChanges();
+      }
+    }
+
+    avatarInput.addEventListener('change', () => {
+      const file = avatarInput.files[0];
+      if (file) {
+        avatarPreview.src = URL.createObjectURL(file);
+      }
+      checkChanges();
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!validateFields()) {
+        return;
+      }
+
+      const formData = new FormData(form);
+      const csrfToken = document.cookie.match(/csrf_token=([^;]+)/)?.[1];
+      if (csrfToken) {
+        formData.append("csrf_token", csrfToken);
+      }
+
+      try {
+        const res = await fetch('/auth/profile', {
+          method: 'POST',
+          credentials: 'include',
+          body: formData
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          message.textContent = data.message || 'Profile updated';
+          message.style.color = '#4a2e9e';
+          saveButton.disabled = true;
+          setTimeout(() => location.reload(), 500);
+        } else {
+          message.textContent = data.detail || 'Update error';
+          message.style.color = '#d6336c';
+        }
+      } catch (err) {
+        message.textContent = 'Server connection error';
+        message.style.color = '#d6336c';
+      }
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        const response = await fetch('/auth/logout', {
+          method: 'POST',
+          credentials: 'include'
+        });
+        if (!response.ok) {
+          console.warn('Server error on logout');
+        }
+      } catch (e) {
+        console.warn('Logout request error', e);
+      }
+      window.location.href = '/';
+    });
+
+    checkChanges();
+  </script>
+
+</body>
+</html>

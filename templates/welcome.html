@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Top Donators</title>
+  <link rel="icon" type="image/png" href="/static/ava.png">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/welcome.css') }}">
+</head>
+<body>
+
+  {% if donation == "success" %}
+  <div id="donate-success-message">
+    🎉 Thank you for your donation! 🎉
+  </div>
+  <canvas id="fireworks"></canvas>
+  {% endif %}
+
+  <div class="container">
+    <h1>Top Donators</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Donation Amount</th>
+          <th>Last Donation</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in top_users %}
+        <tr>
+          <td>
+            {% set rank = loop.index %}
+            {% if rank <= 3 %}
+              <span class="rank">{{ rank }}</span>
+            {% else %}
+              <span class="rank-normal">{{ rank }}</span>
+            {% endif %}
+            <img class="avatar-small"
+                 src="{{ url_for('static', path='avatars/' + user.avatar) if user.avatar else url_for('static', path='default-avatar.png') }}"
+                 alt="Avatar" />
+            {{ user.username }}
+            <span class="philanthrop-level" tabindex="0">
+              {{ user.philanthrop_level }}
+              <span class="tooltip">
+                <div class="tooltip-title">Philanthropist Level {{ user.philanthrop_level }}</div><br />
+                • F1 — from €50<br />
+                • F2 — from €90<br />
+                • F3 — from €150<br />
+                • F4 — from €250<br />
+                • F5 — from €350 and above<br />
+                • Elite — from €850
+              </span>
+            </span>
+          </td>
+          <td>{{ user.amount }}</td>
+          <td>{% if user.last_donation_time %}{{ user.last_donation_time.strftime("%Y-%m-%d %H:%M") }}{% else %}—{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h2>Make a Donation to the Fund</h2>
+    <form id="donate-form" method="POST" action="/auth/payment">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token|default('') }}" />
+      <input type="number" name="amount" id="donate-amount" placeholder="Donation Amount" min="1" required />
+      <button type="submit">Donate</button>
+    </form>
+  </div>
+  
+  <div class="ads-section-wrapper">
+    <h2 class="ads-section-title">Project Support</h2>
+    <div id="ads-section" class="ads-container"></div>
+    
+  </div>
+
+  <div class="profile-top-right">
+    <img src="{{ url_for('static', path='avatars/' + current_user.avatar) if current_user.avatar else url_for('static', path='default-avatar.png') }}" class="avatar-large" />
+    <a href="/auth/profile">Profile</a>
+  </div>
+
+  <div class="center-buttons">
+    <a href="/auth/send_ad" class="button-style">“Request Help” Section</a>
+    <button id="infoBtn" class="button-style">Info</button>
+  </div>
+
+  <div id="infoModal" class="modal">
+    <div class="modal-content">
+      <h2>About Our Fund</h2>
+      <p>
+        This fund was created to help those in need and to allocate resources to the most important necessities. 
+      All donations are directed solely towards charitable purposes, including supporting people in difficult situations, developing social projects, and assisting those who truly need help.
+      We guarantee complete transparency and honesty in the allocation of funds. 
+      Funds are used only for the benefit of society and those in need of assistance.
+      </p>
+      <button id="closeInfo" class="button-style">Close</button>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', path='js/welcome.js') }}"></script>
+</body>
+</html>
