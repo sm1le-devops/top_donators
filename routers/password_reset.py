@@ -57,7 +57,7 @@ async def reset_password_form(request: Request, token: Optional[str] = None):
     if not token:
         return templates.TemplateResponse(
             "reset_password.html",
-            {"request": request, "error": "Токен отсутствует"}
+            {"request": request, "error": "Token is missing"}
         )
 
     try:
@@ -65,12 +65,12 @@ async def reset_password_form(request: Request, token: Optional[str] = None):
     except ExpiredSignatureError:
         return templates.TemplateResponse(
             "reset_password.html",
-            {"request": request, "error": "Токен устарел"}
+            {"request": request, "error": "Token has expired"}
         )
     except JWTError:
         return templates.TemplateResponse(
             "reset_password.html",
-            {"request": request, "error": "Токен недействителен"}
+            {"request": request, "error": "Token is invalid"}
         )
 
     return templates.TemplateResponse("reset_password.html", {"request": request, "token": token})
@@ -79,7 +79,7 @@ async def reset_password_form(request: Request, token: Optional[str] = None):
 # --- API ---
 @router.post(
     "/forgot-password",
-    dependencies=[Depends(RateLimiter(times=5, seconds=3600))]  # до 5 запросов в час с одного IP
+    dependencies=[Depends(RateLimiter(times=3, seconds=3600))]  # до 3 запросов в час с одного IP
 )
 async def forgot_password(
     request_data: ForgotPasswordRequest,
@@ -93,11 +93,11 @@ async def forgot_password(
 
     # Даже если пользователя нет — не раскрываем
     if not user:
-        return {"message": "Если такой email зарегистрирован, на него отправлена ссылка для восстановления"}
+        return {"message": "If an account with this email exists, a recovery link has been sent to it"}
 
     # Антиспам: не чаще 10 минут
     if getattr(user, "last_reset_request", None) and now - int(user.last_reset_request) < 600:
-        raise HTTPException(status_code=429, detail="Слишком частые запросы. Попробуйте позже.")
+        raise HTTPException(status_code=429, detail="Too many requests. Please try again later.")
 
     # Генерация токена
     token = jwt.encode(
@@ -108,9 +108,9 @@ async def forgot_password(
     reset_link = f"{os.getenv('YOUR_DOMAIN', 'https://top-donators1.onrender.com')}/auth/reset-password?token={token}"
 
     message = MessageSchema(
-        subject="Восстановление пароля",
+        subject="Password recovery",
         recipients=[user.email],
-        body=f"Для сброса пароля перейдите по ссылке:\n{reset_link}",
+        body=f"To reset your password, follow this link:\n{reset_link}",
         subtype="plain"
     )
     fm = FastMail(conf)
@@ -120,7 +120,7 @@ async def forgot_password(
     user.last_reset_request = now
     db.commit()
 
-    return {"message": "Если такой email зарегистрирован, на него отправлена ссылка для восстановления"}
+    return {"message": "If an account with this email exists, a recovery link has been sent to it"}
 
 @router.post("/reset-password")
 async def reset_password(data: ResetPasswordRequest, db: Session = Depends(get_db)):
@@ -128,14 +128,14 @@ async def reset_password(data: ResetPasswordRequest, db: Session = Depends(get_d
         payload = jwt.decode(data.token, SECRET_KEY, algorithms=[ALGORITHM])
         email = payload.get("sub")
     except ExpiredSignatureError:
-        raise HTTPException(status_code=400, detail="Токен устарел")
+        raise HTTPException(status_code=400, detail="Token has expired")
     except JWTError:
-        raise HTTPException(status_code=400, detail="Токен недействителен")
+        raise HTTPException(status_code=400, detail="Token is invalid")
 
     user = db.query(models.User).filter(models.User.email == email).first()
     if not user:
-        raise HTTPException(status_code=404, detail="Пользователь не найден")
+        raise HTTPException(status_code=404, detail="User not found")
 
     user.hashed_password = hash_password(data.new_password)
     db.commit()
-    return {"message": "Пароль успешно изменен"}
+    return {"message": "Password changed successfully"}

@@ -13,11 +13,11 @@ def check_auth(request: Request, db: Session = Depends(get_db)):
     cookie_token = request.cookies.get("csrf_token")
 
     if not cookie_username or not cookie_token:
-        raise HTTPException(status_code=401, detail="Не авторизован")
+        raise HTTPException(status_code=401, detail="Unauthorized")
 
     db_user = db.query(models.User).filter(models.User.username == cookie_username).first()
     if not db_user:
-        raise HTTPException(status_code=401, detail="Не авторизован")
+        raise HTTPException(status_code=401, detail="Unauthorized")
 
     # validate_csrf_token должна быть где-то импортирована
     if not validate_csrf_token(cookie_token):

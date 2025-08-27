@@ -8,7 +8,7 @@ load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
-    raise ValueError("❌ Переменная окружения DATABASE_URL не найдена. Проверь файл .env")
+    raise ValueError("❌ Environment variable DATABASE_URL not found. Check the .env file.")
 
 engine = create_engine(
     DATABASE_URL,

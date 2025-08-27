@@ -78,20 +78,20 @@ def is_username_valid(username: str) -> bool:
 @router.post("/register")
 def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
     if not is_username_valid(user.username):
-        raise HTTPException(status_code=400, detail="Имя пользователя должно содержать только английские буквы, цифры и '_'")
+        raise HTTPException(status_code=400, detail="The username must contain only English letters, numbers, and '_'")
 
     db_user = db.query(models.User).filter(
         (models.User.username == user.username) | (models.User.email == user.email)
     ).first()
     if db_user:
-        raise HTTPException(status_code=400, detail="Пользователь с таким именем или email уже существует")
+        raise HTTPException(status_code=400, detail="A user with this username or email already exists")
 
     hashed_password = get_password_hash(user.password)
     new_user = models.User(username=user.username, email=user.email, hashed_password=hashed_password)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    return {"message": "Вы успешно зарегистрированы"}
+    return {"message": "You have successfully registered"}
 
 
 @router.post("/login")
@@ -101,11 +101,11 @@ async def login(data: LoginRequest, request: Request, db: Session = Depends(get_
         raise HTTPException(status_code=403, detail="Invalid or expired CSRF token")
 
     if not is_username_valid(data.username):
-        raise HTTPException(status_code=400, detail="Имя пользователя некорректно")
+        raise HTTPException(status_code=400, detail="The username is invalid")
 
     db_user = db.query(models.User).filter(models.User.username == data.username).first()
     if not db_user or not verify_password(data.password, db_user.hashed_password):
-        raise HTTPException(status_code=401, detail="Неверное имя пользователя или пароль")
+        raise HTTPException(status_code=401, detail="Incorrect username or password")
 
     response = JSONResponse(content={"redirect_url": "/auth/welcome"})
     response.set_cookie("username", db_user.username, httponly=True, samesite="lax", secure=True)
@@ -116,11 +116,11 @@ async def login(data: LoginRequest, request: Request, db: Session = Depends(get_
 @router.get("/welcome", response_class=HTMLResponse)
 def welcome(request: Request, db: Session = Depends(get_db), username: str | None = Cookie(default=None), donation: str | None = Query(default=None)):
     if not username:
-        raise HTTPException(status_code=401, detail="Не авторизован")
+        raise HTTPException(status_code=401, detail="Unauthorized")
     users = db.query(models.User).order_by(models.User.amount.desc()).limit(10).all()
     current_user = db.query(models.User).filter(models.User.username == username).first()
     if not current_user:
-        raise HTTPException(status_code=404, detail="Пользователь не найден")
+        raise HTTPException(status_code=404, detail="User not found")
     return templates.TemplateResponse("welcome.html", {"request": request, "top_users": users, "current_user": current_user, "donation": donation})
 
 
@@ -145,7 +145,7 @@ async def donate(data: DonateRequest, request: Request, username: str | None = C
     cookie_token = request.cookies.get("csrf_token")
     if not cookie_token or data.csrf_token != cookie_token or not validate_csrf_token(data.csrf_token):
         raise HTTPException(status_code=403, detail="Invalid or expired CSRF token")
-    raise HTTPException(status_code=403, detail="Пополнение баланса возможно только через Stripe")
+    raise HTTPException(status_code=403, detail="Balance top-up is only available via Stripe")
 
 
 @router.get("/profile", response_class=HTMLResponse)
@@ -155,11 +155,11 @@ def profile(
     username: str | None = Cookie(default=None)
 ):
     if not username:
-        raise HTTPException(status_code=401, detail="Не авторизован")
+        raise HTTPException(status_code=401, detail="Unauthorized")
 
     user = db.query(models.User).filter(models.User.username == username).first()
     if not user:
-        raise HTTPException(status_code=404, detail="Пользователь не найден")
+        raise HTTPException(status_code=404, detail="User not found")
 
     avatar_url = f"/static/avatars/{user.avatar}" if user.avatar else None
     csrf_token = generate_csrf_token()
@@ -192,11 +192,11 @@ def profile(
     username: str | None = Cookie(default=None)
 ):
     if not username:
-        raise HTTPException(status_code=401, detail="Не авторизован")
+        raise HTTPException(status_code=401, detail="Unauthorized")
 
     user = db.query(models.User).filter(models.User.username == username).first()
     if not user:
-        raise HTTPException(status_code=404, detail="Пользователь не найден")
+        raise HTTPException(status_code=404, detail="User not found")
 
     avatar_url = f"/static/avatars/{user.avatar}" if user.avatar else None
     csrf_token = generate_csrf_token()
@@ -245,21 +245,21 @@ async def update_profile(
         raise HTTPException(status_code=403, detail="Expired or invalid CSRF token")
 
     if not current_username:
-        raise HTTPException(status_code=401, detail="Не авторизован")
+        raise HTTPException(status_code=401, detail="Unauthorized")
 
     user = db.query(models.User).filter(models.User.username == current_username).first()
     if not user:
-        raise HTTPException(status_code=404, detail="Пользователь не найден")
+        raise HTTPException(status_code=404, detail="User not found")
 
     # --- обновления ---
     if username and username != current_username:
         if db.query(models.User).filter(models.User.username == username).first():
-            raise HTTPException(status_code=400, detail="Имя пользователя уже занято")
+            raise HTTPException(status_code=400, detail="Username is already taken")
         user.username = username
 
     if email and email != user.email:
         if db.query(models.User).filter(models.User.email == email).first():
-            raise HTTPException(status_code=400, detail="Email уже занят")
+            raise HTTPException(status_code=400, detail="Email is already in use")
         user.email = email
 
     if password:
@@ -269,7 +269,7 @@ async def update_profile(
     if avatar and avatar.filename:
         contents = await avatar.read()
         if len(contents) > MAX_AVATAR_SIZE:
-            raise HTTPException(status_code=413, detail="Размер файла слишком большой (максимум 10 Мб)")
+            raise HTTPException(status_code=413, detail="The file size is too large (maximum 10 MB)")
 
         from PIL import Image
         from io import BytesIO
@@ -278,13 +278,13 @@ async def update_profile(
             img = Image.open(BytesIO(contents))
             img.verify()
         except Exception:
-            raise HTTPException(status_code=400, detail="Файл не является изображением")
+            raise HTTPException(status_code=400, detail="The file is not an image")
 
         safe_filename = os.path.basename(avatar.filename)
         ext = os.path.splitext(safe_filename)[1].lower()
         ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg"}
         if ext not in ALLOWED_EXTENSIONS:
-            raise HTTPException(status_code=400, detail="Неподдерживаемое расширение файла")
+            raise HTTPException(status_code=400, detail="Unsupported file extension")
 
         avatar_filename = f"user_{user.id}_{int(time.time())}{ext}"
         avatar_path = os.path.join(UPLOAD_AVATAR_DIR, avatar_filename)
@@ -295,7 +295,7 @@ async def update_profile(
                 try:
                     os.remove(old_avatar_path)
                 except Exception as e:
-                    print(f"Ошибка удаления старого аватара: {e}")
+                    print(f"Error deleting old avatar: {e}")
 
         with open(avatar_path, "wb") as buffer:
             buffer.write(contents)
@@ -304,7 +304,7 @@ async def update_profile(
 
     db.commit()
 
-    response = JSONResponse(content={"message": "Профиль успешно обновлён"})
+    response = JSONResponse(content={"message": "Profile updated successfully"})
 
     # если юзер сменил username → обновляем cookie
     if username and username != current_username:
@@ -382,7 +382,7 @@ async def send_ad(request: Request):
 
 @router.post("/logout")
 async def logout():
-    response = JSONResponse({"message": "Вы успешно вышли из аккаунта"})
+    response = JSONResponse({"message": "You have successfully logged out"})
     response.delete_cookie("username", path="/")
     response.delete_cookie("csrf_token", path="/")
     response.delete_cookie("__stripe_mid", path="/")
@@ -406,16 +406,16 @@ async def create_checkout_session(
     db: Session = Depends(get_db)
 ):
     if not username:
-        raise HTTPException(status_code=401, detail="Не авторизован")
+        raise HTTPException(status_code=401, detail="Not authorized")
 
     user = db.query(models.User).filter(models.User.username == username).first()
     if not user:
-        raise HTTPException(status_code=404, detail="Пользователь не найден")
+        raise HTTPException(status_code=404, detail="User not found")
 
     data = await request.json()
     amount = data.get("amount", 0)
     if amount < 1:
-        raise HTTPException(status_code=400, detail="Некорректная сумма")
+        raise HTTPException(status_code=400, detail="Invalid amount")
 
     try:
         session = stripe.checkout.Session.create(
@@ -423,7 +423,7 @@ async def create_checkout_session(
             line_items=[{
                 "price_data": {
                     "currency": "eur",
-                    "product_data": {"name": "Донат проекту"},
+                    "product_data": {"name": "Donate to the project"},
                     "unit_amount": int(amount * 100),  # Stripe требует целое число в центах
                 },
                 "quantity": 1,
@@ -511,6 +511,6 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
 
 @router.get("/cancel", response_class=HTMLResponse)
 async def cancel_page(request: Request):
-    return HTMLResponse("<h1>Оплата отменена ❌</h1><a href='/auth/welcome'>Вернуться</a>")
+    return HTMLResponse("<h1>Payment canceled ❌</h1><a href='/auth/welcome'>Back</a>")
 
 

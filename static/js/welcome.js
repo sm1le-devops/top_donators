@@ -97,7 +97,7 @@ if (adsContainer) {
             <h3>${ad.title || 'Объявление'}</h3>
             <p>${ad.text || 'Подробности отсутствуют.'}</p>
             <input type="number" id="donate-amount-${index}" placeholder="Сумма" min="1"/>
-            <button onclick="makeDonation(${index})">Донат</button>
+            <button onclick="makeDonation(${index})">Donate</button>
           </div>
         </div>`;
         card.addEventListener("click", e => {
@@ -106,12 +106,12 @@ if (adsContainer) {
         adsContainer.appendChild(card);
       });
     })
-    .catch(err => console.error('Ошибка загрузки объявлений:', err));
+    .catch(err => console.error('Error loading ads:', err));
 }
 
 function makeDonation(index) {
   const amountInput = document.getElementById(`donate-amount-${index}`);
-  if (!amountInput || amountInput.value <= 0) { alert("Введите корректную сумму"); return; }
+  if (!amountInput || amountInput.value <= 0) { alert("Enter a valid amount"); return; }
   window.location.href = `/auth/payment?amount=${encodeURIComponent(amountInput.value)}`;
 }
 
@@ -121,9 +121,9 @@ async function checkAuth() {
     const r = await fetch('/api/check-auth', { method: 'GET', credentials: 'include' });
     if (!r.ok) {
       const data = await r.json();
-      if (data.detail === "Не авторизован") window.location.href = "/";
+      if (data.detail === "Not authorized") window.location.href = "/";
     }
-  } catch (err) { console.error('Ошибка проверки авторизации', err); }
+  } catch (err) { console.error('Authorization check error', err); }
 }
 setInterval(checkAuth, 5000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) checkAuth(); });
