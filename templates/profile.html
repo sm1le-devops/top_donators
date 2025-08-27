@@ -188,7 +188,8 @@
     </form>
 
     <p id="message"></p>
-    <a href="/auth/welcome">Back</a>
+    <button type="button" id="back-btn">Back</button>
+
   </div>
 
   <script>
@@ -333,6 +334,9 @@
     });
 
     checkChanges();
+    document.getElementById('back-btn').addEventListener('click', () => {
+    window.location.href = '/auth/welcome';
+  });
   </script>
 
 </body>
