@@ -66,7 +66,22 @@
       transition: background 0.3s ease, box-shadow 0.3s ease;
       box-shadow: 0 4px 10px rgba(155, 89, 182, 0.6);
     }
+    .link-button {
+    display: block;
+    margin-top: 15px;
+    color: white;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: text-shadow 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeScale 0.5s ease-out forwards;
+    animation-delay: 0.9s; /* задержка после кнопки Sign up */
+  }
 
+  .link-button:hover {
+    text-shadow: 0 0 8px white;
+  }
     button:disabled {
       background: #555;
       cursor: not-allowed;
@@ -108,7 +123,7 @@
       <button type="submit" id="register-btn" disabled>Sign up</button>
     </form>
     <p id="message"></p>
-    <a href="/auth/login" class="toggle-link">Already have an account? Log in</a>
+    <a href="/auth/login" class="link-button" id="login-link">Already have an account? Log in</a>
   </div>
 
   <script>
