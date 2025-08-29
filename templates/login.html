@@ -14,9 +14,10 @@
       justify-content: center;
       align-items: center;
       color: white;
+      padding: 10px;
+      box-sizing: border-box;
     }
 
-    /* Fade-in animation */
     @keyframes fadeScale {
       0% { opacity: 0; transform: scale(0.8); }
       100% { opacity: 1; transform: scale(1); }
@@ -26,7 +27,8 @@
       background: rgba(0, 0, 0, 0.3);
       padding: 30px 40px;
       border-radius: 15px;
-      width: 320px;
+      width: 100%;
+      max-width: 360px;
       box-sizing: border-box;
       text-align: center;
       box-shadow: 0 0 20px rgba(0,0,0,0.5);
@@ -48,49 +50,33 @@
       animation: fadeScale 0.5s ease-out forwards;
     }
 
-    input:nth-of-type(1) {
-      animation-delay: 0.2s;
-    }
-    input:nth-of-type(2) {
-      animation-delay: 0.3s;
-    }
-    button {
-      margin-top: 15px;
-      animation-delay: 0.4s;
-    }
-    .link-button {
-      display: block;
-      margin-top: 15px;
-      color: white;
-      text-decoration: underline;
-      cursor: pointer;
-      transition: text-shadow 0.3s ease;
-      animation-delay: 0.5s;
-    }
+    input:nth-of-type(1) { animation-delay: 0.2s; }
+    input:nth-of-type(2) { animation-delay: 0.3s; }
+    button { margin-top: 15px; animation-delay: 0.4s; }
+    .link-button { display: block; margin-top: 15px; animation-delay: 0.5s; }
 
-    .link-button:hover {
-      text-shadow: 0 0 8px white;
-    }
+    .link-button:hover { text-shadow: 0 0 8px white; }
 
     input {
       width: 100%;
       margin: 10px 0;
-      padding: 10px;
+      padding: 12px;
       border-radius: 6px;
       border: none;
       font-size: 16px;
+      box-sizing: border-box;
     }
 
     button {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       border: none;
       border-radius: 6px;
       background: #9b59b6;
       font-size: 18px;
       color: white;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
       box-shadow: 0 4px 10px rgba(155, 89, 182, 0.6);
     }
 
@@ -99,13 +85,40 @@
       box-shadow: 0 6px 14px rgba(142, 68, 173, 0.8);
     }
 
-    #forgot-link {
-      display: none;
+    #forgot-link { display: none; }
+    #message { margin-top: 10px; font-weight: bold; }
+
+    /* --- Адаптивность --- */
+    @media (max-width: 480px) {
+      #container {
+        padding: 20px;
+      }
+      h2 {
+        font-size: 1.6rem;
+      }
+      input, button {
+        font-size: 15px;
+        padding: 10px;
+      }
+      .link-button {
+        font-size: 14px;
+      }
     }
 
-    #message {
-      margin-top: 10px;
-      font-weight: bold;
+    @media (max-width: 360px) {
+      #container {
+        padding: 15px;
+      }
+      h2 {
+        font-size: 1.4rem;
+      }
+      input, button {
+        font-size: 14px;
+        padding: 8px;
+      }
+      .link-button {
+        font-size: 13px;
+      }
     }
   </style>
 </head>
@@ -130,7 +143,6 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-
       const payload = {
         username: form.username.value.trim(),
         password: form.password.value.trim(),
