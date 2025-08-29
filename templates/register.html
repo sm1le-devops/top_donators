@@ -7,17 +7,16 @@
   <style>
     body {
       margin: 0;
-      min-height: 100vh;
+      height: 100vh;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #6a11cb 0%, #8e44ad 100%);
       display: flex;
       justify-content: center;
       align-items: center;
       color: white;
-      padding: 10px;
-      box-sizing: border-box;
     }
 
+    /* Анимация появления */
     @keyframes fadeScale {
       0% { opacity: 0; transform: scale(0.8); }
       100% { opacity: 1; transform: scale(1); }
@@ -27,8 +26,7 @@
       background: rgba(0, 0, 0, 0.4);
       padding: 30px 40px;
       border-radius: 15px;
-      width: 100%;
-      max-width: 360px;
+      width: 320px;
       box-sizing: border-box;
       text-align: center;
       box-shadow: 0 0 20px rgba(0,0,0,0.5);
@@ -98,21 +96,6 @@
     .toggle-link:hover {
       color: #b296c6;
     }
-
-    /* --- Адаптивность --- */
-    @media (max-width: 480px) {
-      h2 { font-size: 1.6rem; margin-bottom: 25px; }
-      input, button { font-size: 15px; padding: 10px; }
-      .toggle-link { font-size: 13px; }
-      #container { padding: 25px 20px; }
-    }
-
-    @media (max-width: 360px) {
-      h2 { font-size: 1.4rem; margin-bottom: 20px; }
-      input, button { font-size: 14px; padding: 8px; }
-      .toggle-link { font-size: 12px; }
-      #container { padding: 20px 15px; }
-    }
   </style>
 </head>
 <body>
@@ -152,6 +135,7 @@
       return "";
     }
 
+
     function validateForm() {
       const username = form.username.value.trim();
       const email = form.email.value.trim();
@@ -181,6 +165,7 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+
       if (!validateForm()) return;
 
       const payload = {
