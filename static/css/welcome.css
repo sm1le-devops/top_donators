@@ -23,6 +23,21 @@ body {
   transform: translateY(20px);
   animation: fadeSlideIn 1s ease forwards;
 }
+.container form button {
+  padding: 20px 40px; /* больше отступы */
+  font-size: 22px;    /* увеличенный шрифт */
+  border-radius: 12px;
+  background-color: #9b59b6;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.container form button:hover {
+  background-color: #8e44ad;
+  transform: scale(1.05);
+}
 
 @keyframes fadeSlideIn {
   0% { opacity: 0; transform: translateY(20px); }
