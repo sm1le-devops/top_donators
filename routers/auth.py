@@ -116,11 +116,11 @@ async def login(data: LoginRequest, request: Request, db: Session = Depends(get_
 @router.get("/welcome", response_class=HTMLResponse)
 def welcome(request: Request, db: Session = Depends(get_db), username: str | None = Cookie(default=None), donation: str | None = Query(default=None)):
     if not username:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        return RedirectResponse(url="/", status_code=303)
     users = db.query(models.User).order_by(models.User.amount.desc()).limit(10).all()
     current_user = db.query(models.User).filter(models.User.username == username).first()
     if not current_user:
-        raise HTTPException(status_code=404, detail="User not found")
+        return RedirectResponse(url="/", status_code=303)
     return templates.TemplateResponse("welcome.html", {"request": request, "top_users": users, "current_user": current_user, "donation": donation})
 
 
@@ -155,11 +155,11 @@ def profile(
     username: str | None = Cookie(default=None)
 ):
     if not username:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        return RedirectResponse(url="/", status_code=303)
 
     user = db.query(models.User).filter(models.User.username == username).first()
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        return RedirectResponse(url="/", status_code=303)
 
     avatar_url = f"/static/avatars/{user.avatar}" if user.avatar else None
     csrf_token = generate_csrf_token()
@@ -382,7 +382,7 @@ async def send_ad(request: Request):
 
 @router.post("/logout")
 async def logout():
-    response = RedirectResponse(url="/", status_code=401)
+    response = RedirectResponse(url="/", status_code=303)
     response.delete_cookie("username", path="/")
     response.delete_cookie("csrf_token", path="/")
     response.delete_cookie("__stripe_mid", path="/")
