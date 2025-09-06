@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Top donators</title>
-  <link rel="icon" type="image/png" href="/static/ava.png">
+  <link rel="icon" type="image/png" href="/static/GYMA.jpg">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
 
@@ -11,7 +11,19 @@
       margin: 0;
       height: 100vh;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #6a11cb 0%, #8e44ad 100%);
+
+      /* Градиент + картинка вместе */
+      background: 
+        linear-gradient(135deg, #6a11cb 0%, #8e44ad 100%),
+        url("/static/bg.jpg");
+
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+
+      /* Эффект "растворения" картинки в градиенте */
+      background-blend-mode: overlay;
+
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -98,5 +110,4 @@
   <p class="subtitle">A fund for charitable donations and supporting those in need.</p>
 
 </body>
-
 </html>
