@@ -382,7 +382,7 @@ async def send_ad(request: Request):
 
 @router.post("/logout")
 async def logout():
-    response = RedirectResponse(url="/", status_code=303)
+    response = RedirectResponse(url="/", status_code=401)
     response.delete_cookie("username", path="/")
     response.delete_cookie("csrf_token", path="/")
     response.delete_cookie("__stripe_mid", path="/")
