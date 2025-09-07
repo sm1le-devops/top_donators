@@ -9,12 +9,17 @@
       margin: 0;
       padding: 20px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #6a11cb 0%, #8e44ad 100%);
+      /* Фото под фиолетовым градиентом */
+      background: 
+        linear-gradient(135deg, rgba(106,17,203,0.7) 0%, rgba(142,68,173,0.7) 100%), 
+        url('https://top-donators.onrender.com/static/welcome_phone.jpg') no-repeat center center fixed;
+      background-size: cover;
       color: #333;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
     }
 
     .ad-form-wrapper {
