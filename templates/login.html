@@ -18,7 +18,7 @@
       overflow: hidden;
     }
 
-    /* SVG с горами */
+    /* SVG снизу */
     .mountains {
       position: absolute;
       bottom: 0;
@@ -28,7 +28,17 @@
       pointer-events: none;
     }
 
-    /* Fade-in animation */
+    /* SVG сверху */
+    .mountains-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 20%;   /* уменьшено */
+      transform: scaleY(-1); /* перевернуто */
+      pointer-events: none;
+    }
+
     @keyframes fadeScale {
       0% { opacity: 0; transform: scale(0.8); }
       100% { opacity: 1; transform: scale(1); }
@@ -61,16 +71,9 @@
       animation: fadeScale 0.5s ease-out forwards;
     }
 
-    input:nth-of-type(1) {
-      animation-delay: 0.2s;
-    }
-    input:nth-of-type(2) {
-      animation-delay: 0.3s;
-    }
-    button {
-      margin-top: 15px;
-      animation-delay: 0.4s;
-    }
+    input:nth-of-type(1) { animation-delay: 0.2s; }
+    input:nth-of-type(2) { animation-delay: 0.3s; }
+    button { margin-top: 15px; animation-delay: 0.4s; }
     .link-button {
       display: block;
       margin-top: 15px;
@@ -81,9 +84,7 @@
       animation-delay: 0.5s;
     }
 
-    .link-button:hover {
-      text-shadow: 0 0 8px white;
-    }
+    .link-button:hover { text-shadow: 0 0 8px white; }
 
     input {
       width: 100%;
@@ -112,9 +113,7 @@
       box-shadow: 0 6px 14px rgba(142, 68, 173, 0.8);
     }
 
-    #forgot-link {
-      display: none;
-    }
+    #forgot-link { display: none; }
 
     #message {
       margin-top: 10px;
@@ -123,7 +122,13 @@
   </style>
 </head>
 <body>
-  <!-- Контур гор -->
+  <!-- Контур гор сверху -->
+  <svg class="mountains-top" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" preserveAspectRatio="none">
+    <path d="M0 250 L150 100 L300 230 L450 120 L600 200 L750 90 L900 210 L1000 150 L1000 300 L0 300 Z" 
+          fill="none" stroke="white" stroke-width="1.5"/>
+  </svg>
+
+  <!-- Контур гор снизу -->
   <svg class="mountains" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" preserveAspectRatio="none">
     <path d="M0 250 L150 100 L300 230 L450 120 L600 200 L750 90 L900 210 L1000 150 L1000 300 L0 300 Z" 
           fill="none" stroke="white" stroke-width="2"/>
@@ -141,6 +146,7 @@
     <a href="/auth/register" class="link-button" id="register-link">No account? Register</a>
     <a href="/auth/forgot-password" class="link-button" id="forgot-link">Forgot password?</a>
   </div>
+
 
   <script>
     const form = document.getElementById('login-form');

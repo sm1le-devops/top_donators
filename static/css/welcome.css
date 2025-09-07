@@ -5,7 +5,7 @@ body {
   /* Фото под фиолетовым градиентом */
   background: 
     linear-gradient(135deg, rgba(106,17,203,0.7) 0%, rgba(142,68,173,0.7) 100%), 
-    url('/static/welcome_phone.jpg') no-repeat center center fixed;
+    url('https://top-donators.onrender.com/static/welcome_phone.jpg') no-repeat center center fixed;
   background-size: cover;
   color: white;
   overflow-x: hidden;
