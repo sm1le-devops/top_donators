@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  padding: 0;
+  padding: 40px; /* общий отступ от краёв */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   /* Фото под фиолетовым градиентом */
   background: 
@@ -9,18 +9,20 @@ body {
   background-size: cover;
   color: white;
   overflow-x: hidden;
+
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start; /* таблица слева */
+  align-items: flex-start;
+  gap: 40px; /* расстояние между таблицей и рекламой */
+  flex-wrap: wrap; /* на маленьких экранах реклама опускается вниз */
   min-height: 100vh;
 }
-
 .container, .ads-section-wrapper {
   flex: 1; /* занимает оставшееся пространство */
 }
 .container {
-  max-width: 700px;
-  margin: 50px auto;
+  flex: 1; /* таблица растягивается */
+  max-width: 900px; /* шире, чем было */
   background: rgba(0, 0, 0, 0.3);
   padding: 30px;
   border-radius: 15px;
@@ -29,8 +31,8 @@ body {
   animation: fadeSlideIn 1s ease forwards;
 }
 .container form button {
-  padding: 20px 40px; /* больше отступы */
-  font-size: 22px;    /* увеличенный шрифт */
+  padding: 20px 40px;
+  font-size: 22px;
   border-radius: 12px;
   background-color: #9b59b6;
   color: white;
@@ -210,8 +212,13 @@ button:hover { background-color: #8e44ad; }
 canvas#fireworks { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
 
 .ads-section-wrapper {
-  margin: 40px auto; max-width: 1200; background: rgba(0, 0, 0, 0.4);
-  padding: 20px; border-radius: 12px; border: 2px solid rgba(255, 255, 255, 0.2);
+  width: 300px; /* фиксированная ширина рекламы */
+  flex-shrink: 0; /* не сжимается */
+  margin: 0; /* убираем автоматические маргины */
+  background: rgba(0, 0, 0, 0.4);
+  padding: 20px;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 .ads-section-title { text-align: center; font-size: 22px; margin-bottom: 20px; color: #fff; }
 .ads-container {
