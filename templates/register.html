@@ -27,6 +27,16 @@
       height: 40%;
       pointer-events: none;
     }
+    /* SVG сверху */
+    .mountains-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 40%;   /* равна нижней */
+      transform: scaleY(-1); /* перевернуто */
+      pointer-events: none;
+    }
 
     /* Анимация появления */
     @keyframes fadeScale {
@@ -129,6 +139,12 @@
   </style>
 </head>
 <body>
+  <!-- Контур гор сверху -->
+  <svg class="mountains-top" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" preserveAspectRatio="none">
+    <path d="M0 250 L150 100 L300 230 L450 120 L600 200 L750 90 L900 210 L1000 150 L1000 300 L0 300 Z" 
+          fill="none" stroke="white" stroke-width="2"/>
+  </svg>
+
   <!-- Контур гор -->
   <svg class="mountains" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" preserveAspectRatio="none">
     <path d="M0 250 L150 100 L300 230 L450 120 L600 200 L750 90 L900 210 L1000 150 L1000 300 L0 300 Z" 
