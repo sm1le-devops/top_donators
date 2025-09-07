@@ -1,253 +1,226 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <title>Registration</title>
-  <link rel="icon" type="image/png" href="/static/ava.png">
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #6a11cb 0%, #8e44ad 100%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      position: relative;
-      overflow: hidden;
-    }
+<meta charset="UTF-8" />
+<title>Registration</title>
+<link rel="icon" type="image/png" href="/static/ava.png">
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #6a11cb 0%, #8e44ad 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
 
-    /* SVG с горами */
-    .mountains {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 40%;
-      pointer-events: none;
-    }
-    /* SVG сверху */
-    .mountains-top {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 40%;   /* равна нижней */
-      transform: scaleY(-1); /* перевернуто */
-      pointer-events: none;
-    }
+/* Контуры гор */
+.mountains-top, .mountains-bottom {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
 
-    /* Анимация появления */
-    @keyframes fadeScale {
-      0% { opacity: 0; transform: scale(0.8); }
-      100% { opacity: 1; transform: scale(1); }
-    }
+/* Верхняя линия */
+.mountains-top {
+  top: 0;
+  height: 15%; /* ограничиваем, чтобы не перекрывать контейнер */
+  transform: scaleY(-1);
+}
 
-    #container {
-      background: rgba(0, 0, 0, 0.4);
-      padding: 30px 40px;
-      border-radius: 15px;
-      width: 320px;
-      box-sizing: border-box;
-      text-align: center;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      animation: fadeScale 0.8s ease-out forwards;
-      z-index: 2;
-    }
+/* Нижняя линия */
+.mountains-bottom {
+  bottom: 0;
+  height: 15%;
+}
 
-    h2 {
-      font-size: 2rem;
-      margin-bottom: 30px;
-    }
+/* Анимация появления */
+@keyframes fadeScale {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
 
-    input, button {
-      width: 100%;
-      margin: 10px 0;
-      padding: 10px;
-      border-radius: 6px;
-      border: none;
-      font-size: 16px;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 0.5s forwards;
-    }
+#container {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 30px 40px;
+  border-radius: 15px;
+  width: 320px;
+  box-sizing: border-box;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  animation: fadeScale 0.8s ease-out forwards;
+  z-index: 2;
+}
 
-    input:nth-child(1) { animation-delay: 0.2s; }
-    input:nth-child(2) { animation-delay: 0.4s; }
-    input:nth-child(3) { animation-delay: 0.6s; }
-    button { animation-delay: 0.8s; }
+h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
 
-    @keyframes fadeInUp {
-      to { opacity: 1; transform: translateY(0); }
-    }
+input, button {
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 16px;
+}
 
-    button {
-      background: #9b59b6;
-      color: white;
-      cursor: pointer;
-      transition: background 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 4px 10px rgba(155, 89, 182, 0.6);
-    }
+button {
+  background: #9b59b6;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 10px rgba(155, 89, 182, 0.6);
+}
 
-    .link-button {
-      display: block;
-      margin-top: 15px;
-      color: white;
-      text-decoration: underline;
-      cursor: pointer;
-      transition: text-shadow 0.3s ease;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeScale 0.5s ease-out forwards;
-      animation-delay: 0.9s;
-    }
+button:hover:enabled {
+  background: #8e44ad;
+  box-shadow: 0 6px 14px rgba(142, 68, 173, 0.8);
+}
 
-    .link-button:hover {
-      text-shadow: 0 0 8px white;
-    }
+button:disabled {
+  background: #555;
+  cursor: not-allowed;
+  box-shadow: none;
+}
 
-    button:disabled {
-      background: #555;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
+#message {
+  margin-top: 10px;
+  font-weight: bold;
+  min-height: 20px;
+}
 
-    button:hover:enabled {
-      background: #8e44ad;
-      box-shadow: 0 6px 14px rgba(142, 68, 173, 0.8);
-    }
+.link-button {
+  display: block;
+  margin-top: 15px;
+  color: white;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: text-shadow 0.3s ease;
+}
 
-    #message {
-      margin-top: 10px;
-      font-weight: bold;
-      min-height: 20px;
-    }
-
-    .toggle-link {
-      color: #ddd;
-      display: inline-block;
-      margin-top: 10px;
-      font-size: 14px;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-
-    .toggle-link:hover {
-      color: #b296c6;
-    }
-  </style>
+.link-button:hover {
+  text-shadow: 0 0 8px white;
+}
+</style>
 </head>
 <body>
-  <!-- Контур гор сверху -->
-  <svg class="mountains-top" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" preserveAspectRatio="none">
-    <path d="M0 250 L150 100 L300 230 L450 120 L600 200 L750 90 L900 210 L1000 150 L1000 300 L0 300 Z" 
-          fill="none" stroke="white" stroke-width="2"/>
-  </svg>
 
-  <!-- Контур гор -->
-  <svg class="mountains" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" preserveAspectRatio="none">
-    <path d="M0 250 L150 100 L300 230 L450 120 L600 200 L750 90 L900 210 L1000 150 L1000 300 L0 300 Z" 
-          fill="none" stroke="white" stroke-width="2"/>
-  </svg>
+<!-- Контур гор сверху -->
+<svg class="mountains-top" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" preserveAspectRatio="none">
+  <path d="M0 250 L150 100 L300 230 L450 120 L600 200 L750 90 L900 210 L1000 150 L1000 300 L0 300 Z" 
+        fill="none" stroke="white" stroke-width="2"/>
+</svg>
 
-  <div id="container">
-    <h2>Registration</h2>
-    <form id="register-form" novalidate>
-      <input type="text" id="username" name="username" placeholder="Username" required />
-      <input type="email" id="email" name="email" placeholder="Email" required />
-      <input type="password" id="password" name="password" placeholder="Password" required />
-      <button type="submit" id="register-btn" disabled>Sign up</button>
-    </form>
-    <p id="message"></p>
-    <a href="/auth/login" class="link-button" id="login-link">Already have an account? Log in</a>
-  </div>
+<!-- Контур гор снизу -->
+<svg class="mountains-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" preserveAspectRatio="none">
+  <path d="M0 250 L150 100 L300 230 L450 120 L600 200 L750 90 L900 210 L1000 150 L1000 300 L0 300 Z" 
+        fill="none" stroke="white" stroke-width="2"/>
+</svg>
 
-  <script>
-    const form = document.getElementById('register-form');
-    const message = document.getElementById('message');
-    const registerBtn = document.getElementById('register-btn');
+<div id="container">
+  <h2>Registration</h2>
+  <form id="register-form" novalidate>
+    <input type="text" id="username" name="username" placeholder="Username" required />
+    <input type="email" id="email" name="email" placeholder="Email" required />
+    <input type="password" id="password" name="password" placeholder="Password" required />
+    <button type="submit" id="register-btn" disabled>Sign up</button>
+  </form>
+  <p id="message"></p>
+  <a href="/auth/login" class="link-button" id="login-link">Already have an account? Log in</a>
+</div>
 
-    function containsCyrillic(text) {
-      return /[А-Яа-яЁё]/.test(text);
-    }
+<script>
+const form = document.getElementById('register-form');
+const message = document.getElementById('message');
+const registerBtn = document.getElementById('register-btn');
 
-    function validateEmail(email) {
-      const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;
-      if (containsCyrillic(email)) return "Email must not contain Cyrillic letters";
-      if (!emailRegex.test(email)) return "Enter a valid email";
-      return "";
-    }
+function containsCyrillic(text) {
+  return /[А-Яа-яЁё]/.test(text);
+}
 
-    function validatePassword(password) {
-      if (password.length < 8) return "Password must be at least 8 characters long";
-      if (!/[a-z]/.test(password)) return "Add at least one lowercase letter";
-      if (!/[0-9]/.test(password)) return "Add at least one number";
-      if (containsCyrillic(password)) return "Password must not contain Cyrillic letters";
-      return "";
-    }
+function validateEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (containsCyrillic(email)) return "Email must not contain Cyrillic letters";
+  if (!emailRegex.test(email)) return "Enter a valid email";
+  return "";
+}
 
-    function validateForm() {
-      const username = form.username.value.trim();
-      const email = form.email.value.trim();
-      const password = form.password.value.trim();
+function validatePassword(password) {
+  if (password.length < 8) return "Password must be at least 8 characters long";
+  if (!/[a-z]/.test(password)) return "Add at least one lowercase letter";
+  if (!/[0-9]/.test(password)) return "Add at least one number";
+  if (containsCyrillic(password)) return "Password must not contain Cyrillic letters";
+  return "";
+}
 
-      let error = "";
+function validateForm() {
+  const username = form.username.value.trim();
+  const email = form.email.value.trim();
+  const password = form.password.value.trim();
 
-      if (!username) {
-        error = "Enter username";
-      } else if (containsCyrillic(username)) {
-        error = "Username must not contain Cyrillic letters";
-      } else if (!email) {
-        error = "Enter email";
-      } else {
-        error = validateEmail(email) || validatePassword(password);
-      }
+  let error = "";
 
-      message.textContent = error;
-      message.style.color = error ? "red" : "lightgreen";
-      registerBtn.disabled = !!error;
-      return !error;
-    }
+  if (!username) {
+    error = "Enter username";
+  } else if (containsCyrillic(username)) {
+    error = "Username must not contain Cyrillic letters";
+  } else if (!email) {
+    error = "Enter email";
+  } else {
+    error = validateEmail(email) || validatePassword(password);
+  }
 
-    form.username.addEventListener("input", validateForm);
-    form.email.addEventListener("input", validateForm);
-    form.password.addEventListener("input", validateForm);
+  message.textContent = error;
+  message.style.color = error ? "red" : "lightgreen";
+  registerBtn.disabled = !!error;
+  return !error;
+}
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+form.username.addEventListener("input", validateForm);
+form.email.addEventListener("input", validateForm);
+form.password.addEventListener("input", validateForm);
 
-      if (!validateForm()) return;
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!validateForm()) return;
 
-      const payload = {
-        username: form.username.value.trim(),
-        email: form.email.value.trim(),
-        password: form.password.value.trim()
-      };
+  const payload = {
+    username: form.username.value.trim(),
+    email: form.email.value.trim(),
+    password: form.password.value.trim()
+  };
 
-      try {
-        const res = await fetch('/auth/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-          credentials: 'include'
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-          message.textContent = data.message || 'Successfully registered!';
-          message.style.color = 'lightgreen';
-          setTimeout(() => window.location.href = "/auth/login", 1500);
-        } else {
-          message.textContent = data.detail || 'Registration error';
-          message.style.color = 'red';
-        }
-      } catch {
-        message.textContent = 'Server connection error';
-        message.style.color = 'red';
-      }   
+  try {
+    const res = await fetch('/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      credentials: 'include'
     });
-  </script>
+
+    const data = await res.json();
+    if (res.ok) {
+      message.textContent = data.message || 'Successfully registered!';
+      message.style.color = 'lightgreen';
+      setTimeout(() => window.location.href = "/auth/login", 1500);
+    } else {
+      message.textContent = data.detail || 'Registration error';
+      message.style.color = 'red';
+    }
+  } catch {
+    message.textContent = 'Server connection error';
+    message.style.color = 'red';
+  }
+});
+</script>
+
 </body>
 </html>

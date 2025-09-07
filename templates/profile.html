@@ -1,222 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>User Profile</title>
-  <link rel="icon" type="image/png" href="/static/ava.png">
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #6a11cb 0%, #8e44ad 100%);
-      padding: 20px;
-      color: #333;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      position: relative; /* добавлено */
-    }
+<meta charset="UTF-8" />
+<title>User Profile</title>
+<link rel="icon" type="image/png" href="/static/ava.png">
+<style>
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #6a11cb 0%, #8e44ad 100%);
+  padding: 20px;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+}
 
-    /* SVG снизу */
-    .mountains {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 40%; /* можно увеличить/уменьшить */
-      pointer-events: none;
-      z-index: 1;
-    }
-    #profile-container {
-      background: rgba(255, 255, 255, 0.9);
-      padding: 20px 25px;
-      border-radius: 12px;
-      width: 350px;
-      box-shadow: 0 8px 20px rgba(122, 76, 224, 0.4);
-      text-align: center;
-      position: relative;
-      z-index: 2; /* контейнер над линиями */
-    }
+/* Верхняя и нижняя линии */
+.mountains-top, .mountains-bottom {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
 
-    h2 {
-      margin-bottom: 20px;
-      font-weight: 600;
-      color: #4a2e9e;
-    }
+.mountains-top {
+  top: 0;
+  height: 15%;  /* не перекрывает контейнер */
+  transform: scaleY(-1);
+}
 
-    #avatar-wrapper {
-      position: relative;
-      display: inline-block;
-      cursor: pointer;
-      margin-bottom: 15px;
-      width: 90px;
-      height: 90px;
-    }
+.mountains-bottom {
+  bottom: 0;
+  height: 15%;
+}
 
-    img.avatar {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #7a4ce0;
-      display: block;
-    }
+#profile-container {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px 25px;
+  border-radius: 12px;
+  width: 350px;
+  box-shadow: 0 8px 20px rgba(122, 76, 224, 0.4);
+  text-align: center;
+  position: relative;
+  z-index: 2; /* над линиями */
+}
 
-    #avatar-overlay {
-      position: absolute;
-      top: 0; left: 0; width: 90px; height: 90px;
-      border-radius: 50%;
-      background: rgba(0, 0, 0, 0.5);
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 24px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      user-select: none;
-    }
+h2 {
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #4a2e9e;
+}
 
-    #avatar-wrapper:hover #avatar-overlay {
-      opacity: 1;
-    }
+#avatar-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  margin-bottom: 15px;
+  width: 90px;
+  height: 90px;
+}
 
-    form label {
-      display: block;
-      text-align: left;
-      margin-top: 10px;
-      font-weight: 600;
-      font-size: 14px;
-      color: #4a2e9e;
-    }
+img.avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #7a4ce0;
+}
 
-    input, button {
-      width: 100%;
-      padding: 8px 12px;
-      margin-top: 5px;
-      border-radius: 8px;
-      border: none;
-      font-size: 14px;
-      outline: none;
-      box-sizing: border-box;
-    }
+#avatar-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 90px; height: 90px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  user-select: none;
+}
 
-    input {
-      background: #e3dcff;
-      color: #4a2e9e;
-      transition: background-color 0.3s ease;
-    }
+#avatar-wrapper:hover #avatar-overlay { opacity: 1; }
 
-    input::placeholder {
-      color: #9b8ed6;
-    }
+form label {
+  display: block;
+  text-align: left;
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #4a2e9e;
+}
 
-    input:focus {
-      background: #d0c1ff;
-      color: #3e228e;
-    }
+input, button {
+  width: 100%;
+  padding: 8px 12px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+}
 
-    button {
-      margin-top: 20px;
-      background: linear-gradient(135deg, #7a4ce0, #5a31b8);
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 6px 15px rgba(122, 76, 224, 0.6);
-      transition: background 0.3s ease, box-shadow 0.3s ease;
-    }
+input {
+  background: #e3dcff;
+  color: #4a2e9e;
+  transition: background-color 0.3s ease;
+}
 
-    button:hover:enabled {
-      background: linear-gradient(135deg, #5a31b8, #7a4ce0);
-      box-shadow: 0 8px 20px rgba(122, 76, 224, 0.8);
-    }
+input::placeholder { color: #9b8ed6; }
+input:focus { background: #d0c1ff; color: #3e228e; }
 
-    button:disabled {
-      background: #aaa;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
+button {
+  margin-top: 20px;
+  background: linear-gradient(135deg, #7a4ce0, #5a31b8);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(122, 76, 224, 0.6);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
 
-    #logout-btn {
-      background: linear-gradient(135deg, #e03b3b, #b82323);
-      margin-top: 10px;
-    }
+button:hover:enabled {
+  background: linear-gradient(135deg, #5a31b8, #7a4ce0);
+  box-shadow: 0 8px 20px rgba(122, 76, 224, 0.8);
+}
 
-    #logout-btn:hover {
-      background: linear-gradient(135deg, #b82323, #e03b3b);
-      box-shadow: 0 8px 20px rgba(224, 59, 59, 0.8);
-    }
+button:disabled { background: #aaa; cursor: not-allowed; box-shadow: none; }
 
-    #message {
-      margin-top: 15px;
-      min-height: 18px;
-      font-weight: 600;
-      color: #5a31b8;
-    }
+#logout-btn {
+  background: linear-gradient(135deg, #e03b3b, #b82323);
+  margin-top: 10px;
+}
+#logout-btn:hover {
+  background: linear-gradient(135deg, #b82323, #e03b3b);
+  box-shadow: 0 8px 20px rgba(224, 59, 59, 0.8);
+}
 
-    a {
-      display: inline-block;
-      margin-top: 15px;
-      color: #7a4ce0;
-      text-decoration: none;
-      font-size: 14px;
-      transition: color 0.3s ease;
-    }
+#message {
+  margin-top: 15px;
+  min-height: 18px;
+  font-weight: 600;
+  color: #5a31b8;
+}
 
-    a:hover {
-      color: #5a31b8;
-    }
-  </style>
+a { display: inline-block; margin-top: 15px; color: #7a4ce0; text-decoration: none; font-size: 14px; transition: color 0.3s ease; }
+a:hover { color: #5a31b8; }
+</style>
 </head>
 <body>
-  <!-- Линия сверху -->
-  <svg class="mountains-top" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" preserveAspectRatio="none"
-      style="position:absolute; top:0; left:0; width:100%; height:20%; pointer-events:none; z-index:0;">
-    <path d="M0 250 L150 100 L300 230 L450 120 L600 200 L750 90 L900 210 L1000 150 L1000 300 L0 300 Z" 
-          fill="none" stroke="white" stroke-width="2"/>
-  </svg>
 
-  <!-- Контур гор снизу -->
-  <svg class="mountains" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" preserveAspectRatio="none">
-    <path d="M0 250 L150 100 L300 230 L450 120 L600 200 L750 90 L900 210 L1000 150 L1000 300 L0 300 Z" 
-          fill="none" stroke="white" stroke-width="2"/>
-  </svg>
+<!-- Верхняя линия -->
+<svg class="mountains-top" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" preserveAspectRatio="none">
+  <path d="M0 250 L150 100 L300 230 L450 120 L600 200 L750 90 L900 210 L1000 150 L1000 300 L0 300 Z" 
+        fill="none" stroke="white" stroke-width="2"/>
+</svg>
 
-  <div id="profile-container">
-    <h2>Profile</h2>
+<!-- Нижняя линия -->
+<svg class="mountains-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" preserveAspectRatio="none">
+  <path d="M0 250 L150 100 L300 230 L450 120 L600 200 L750 90 L900 210 L1000 150 L1000 300 L0 300 Z" 
+        fill="none" stroke="white" stroke-width="2"/>
+</svg>
 
-    <div id="avatar-wrapper" title="Change Photo">
-      <img src="{{ avatar_url or '/static/default-avatar.png' }}" alt="Avatar" class="avatar" id="avatar-preview" />
-      <label for="avatar" id="avatar-overlay">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="white" viewBox="0 0 24 24">
-          <path d="M12 17a5 5 0 100-10 5 5 0 000 10zm-6-9.9V7a1 1 0 011-1h1.2l.6-1.2A1 1 0 0110.6 4h2.8a1 1 0 01.9.6L15 6h1.2a1 1 0 011 1v.1M4 8h16v10a2 2 0 01-2 2H6a2 2 0 01-2-2V8z"/>
-        </svg>
-      </label>
-    </div>
+<div id="profile-container">
+  <h2>Profile</h2>
 
-    <form id="profile-form" method="post" enctype="multipart/form-data">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-
-      <label>Username</label>
-      <input type="text" id="username" name="username" value="{{ current_user.username }}" required />
-
-      <label>Email</label>
-      <input type="email" id="email" name="email" value="{{ current_user.email }}" required />
-
-      <label>New password (leave blank to keep current)</label>
-      <input type="password" id="password" name="password" placeholder="New password" />
-
-      <input type="file" id="avatar" name="avatar" accept="image/*" style="display:none;" />
-
-      <button type="submit" id="save-button" disabled>Save Changes</button>
-      <button type="button" id="logout-btn">Logout</button>
-    </form>
-
-    <p id="message"></p>
-    <button type="button" id="back-btn">Back</button>
-
+  <div id="avatar-wrapper" title="Change Photo">
+    <img src="{{ avatar_url or '/static/default-avatar.png' }}" alt="Avatar" class="avatar" id="avatar-preview" />
+    <label for="avatar" id="avatar-overlay">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="white" viewBox="0 0 24 24">
+        <path d="M12 17a5 5 0 100-10 5 5 0 000 10zm-6-9.9V7a1 1 0 011-1h1.2l.6-1.2A1 1 0 0110.6 4h2.8a1 1 0 01.9.6L15 6h1.2a1 1 0 011 1v.1M4 8h16v10a2 2 0 01-2 2H6a2 2 0 01-2-2V8z"/>
+      </svg>
+    </label>
   </div>
+
+  <form id="profile-form" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label>Username</label>
+    <input type="text" id="username" name="username" value="{{ current_user.username }}" required />
+    <label>Email</label>
+    <input type="email" id="email" name="email" value="{{ current_user.email }}" required />
+    <label>New password (leave blank to keep current)</label>
+    <input type="password" id="password" name="password" placeholder="New password" />
+    <input type="file" id="avatar" name="avatar" accept="image/*" style="display:none;" />
+    <button type="submit" id="save-button" disabled>Save Changes</button>
+    <button type="button" id="logout-btn">Logout</button>
+  </form>
+
+  <p id="message"></p>
+  <button type="button" id="back-btn">Back</button>
+</div>
 
   <script>
     const form = document.getElementById('profile-form');
