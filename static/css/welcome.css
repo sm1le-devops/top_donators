@@ -2,16 +2,16 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  /* Фото под фиолетовым градиентом */
   background: 
     linear-gradient(135deg, rgba(106,17,203,0.7) 0%, rgba(142,68,173,0.7) 100%), 
     url('https://top-donators.onrender.com/static/welcome_phone.jpg') no-repeat center center fixed;
   background-size: cover;
   color: white;
   overflow-x: hidden;
+
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;   /* Колонка сверху вниз */
+  align-items: center;      /* Центр по горизонтали */
   min-height: 100vh;
 }
 
@@ -21,6 +21,7 @@ body {
 .container {
   max-width: 700px;
   margin: 50px auto;
+  order: 1;  /* таблица сверху */
   background: rgba(0, 0, 0, 0.3);
   padding: 30px;
   border-radius: 15px;
@@ -210,8 +211,9 @@ button:hover { background-color: #8e44ad; }
 canvas#fireworks { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
 
 .ads-section-wrapper {
-  margin: 40px auto; max-width: 1200; background: rgba(0, 0, 0, 0.4);
-  padding: 20px; border-radius: 12px; border: 2px solid rgba(255, 255, 255, 0.2);
+  margin: 30px auto 50px auto; max-width: 1200px; background: rgba(0, 0, 0, 0.4);
+  padding: 20px; border-radius: 12px; border: 2px solid rgba(255, 255, 255, 0.2);order: 2;  /* объявления снизу */
+
 }
 .ads-section-title { text-align: center; font-size: 22px; margin-bottom: 20px; color: #fff; }
 .ads-container {
