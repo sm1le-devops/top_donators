@@ -217,8 +217,17 @@ canvas#fireworks { position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
 }
 .ads-section-title { text-align: center; font-size: 22px; margin-bottom: 20px; color: #fff; }
 .ads-container {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;
-  margin-top: 10px; perspective: 1000px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* ровно 2 карточки в ряд */
+  gap: 20px;
+  margin-top: 10px;
+  perspective: 1000px;
+  justify-items: center; /* центрируем карточки */
+}
+@media (max-width: 768px) {
+  .ads-container {
+    grid-template-columns: 1fr; /* по одному объявлению в ряд */
+  }
 }
 .ad-card {
   cursor: pointer;
@@ -233,28 +242,32 @@ canvas#fireworks { position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
 }
 .ad-card-inner {
   position: relative;
-  width: 250px;   /* одинаковая ширина */
-  height: 280px;  /* одинаковая высота */
+  width: 100%;       /* занимает всю ширину ячейки */
+  max-width: 300px;  /* ограничение ширины карточки */
+  height: 320px;     /* фиксированная высота */
   text-align: center;
   transition: transform 0.8s;
   transform-style: preserve-3d;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   display: flex;
-  flex-direction: column; /* картинка сверху, текст снизу */
+  flex-direction: column;
   overflow: hidden;
 }
-.ad-card.flipped .ad-card-inner { transform: rotateY(180deg); }
-.ad-card-front, .ad-card-back {
+.ad-card.flipped .ad-card-inner { transform: rotateY(180deg);
+}
+.ad-card-front,
+.ad-card-back {
   position: absolute;
-  width: 250px;   /* одинаковая ширина */
-  height: 280px;
+  width: 100%;
+  height: 100%;
   backface-visibility: hidden;
   border-radius: 10px;
   overflow: hidden;
 }
-.ad-card-front { width: 250px;   /* одинаковая ширина */
-  height: 280px;}
+.ad-card-front {
+  background: rgba(0,0,0,0.4);
+}
 
 .ad-image { width: 100%; height: 150px; object-fit: cover; border-bottom: 2px solid rgba(255, 255, 255, 0.2); }
 .ad-description {
@@ -339,7 +352,6 @@ canvas#fireworks { position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
   backface-visibility: hidden;
   border-radius: 10px;
   overflow: hidden;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -349,7 +361,11 @@ canvas#fireworks { position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
   box-sizing: border-box;
   transform: rotateY(180deg);
 }
-
+@media (max-width: 768px) {
+  .ads-container {
+    grid-template-columns: 1fr; /* одна карточка на ряд */
+  }
+}
 .ad-card-back h3 {
   margin-top: 0;
   margin-bottom: 10px;
