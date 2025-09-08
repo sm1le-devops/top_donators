@@ -5,7 +5,7 @@ body {
   /* Фото под фиолетовым градиентом */
   background: 
     linear-gradient(135deg, rgba(106,17,203,0.7) 0%, rgba(142,68,173,0.7) 100%), 
-    url('https://top-donators.onrender.com/static/welcome_phone.jpg') no-repeat center center fixed;
+    url('/static/welcome_phone.jpg') no-repeat center center fixed;
   background-size: cover;
   color: white;
   overflow-x: hidden;
@@ -16,15 +16,14 @@ body {
 }
 
 .container, .ads-section-wrapper {
-  width: 95%; /* почти вся ширина экрана */
-  margin: 20px auto;
+  flex: 1; /* занимает оставшееся пространство */
 }
 .container {
   max-width: 700px;
   margin: 50px auto;
   background: rgba(0, 0, 0, 0.3);
-  padding: 20px;
-  border-radius: 12px;
+  padding: 30px;
+  border-radius: 15px;
   opacity: 0;
   transform: translateY(20px);
   animation: fadeSlideIn 1s ease forwards;
@@ -57,15 +56,14 @@ h1, h2 {
 
 table {
   width: 100%;
-  border-collapse: collapse; /* убрал gaps для плотности */
-  border-radius: 6px;
-  overflow: hidden; /* чтобы скругление применялось */
-  box-shadow: 0 3px 10px rgba(0,0,0,0.25);
-  font-size: 14px; /* уменьшенный шрифт */
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
 th, td {
-  padding: 6px 8px; /* компактнее отступы */
+  padding: 12px 15px;
   text-align: left;
   vertical-align: middle;
 }
@@ -73,46 +71,46 @@ th, td {
 th {
   background-color: rgba(255, 255, 255, 0.15);
   font-weight: 600;
-  font-size: 13px; /* чуть меньше шрифт */
+  letter-spacing: 0.5px;
 }
 
+tr {
+  transition: background 0.3s ease, transform 0.2s ease;
+}
 
 tr:nth-child(even) {
   background-color: rgba(255, 255, 255, 0.08);
 }
 
 tr:hover {
-  background-color: rgba(255, 255, 255, 0.18);
-  transform: translateY(-1px); /* чуть легче эффект */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  background-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .avatar-small {
-  width: 24px; 
-  height: 24px; 
-  border-radius: 50%; 
-  object-fit: cover;
-  margin-right: 6px;
-  border: 1px solid white;
+  width: 32px; height: 32px; border-radius: 50%; object-fit: cover;
+  margin-right: 8px; vertical-align: middle; border: 2px solid white;
 }
 
 .rank {
-  display: inline-block; min-width: 20px; padding: 1px 4px; margin-right: 5px; font-size: 12px;
-  border-radius: 6px; font-weight: bold; text-align: center;
+  display: inline-block; min-width: 24px; padding: 2px 6px; margin-right: 8px;
+  border-radius: 8px; font-weight: bold; text-align: center;
   vertical-align: middle; color: black; background-color: #ffd700;
   border: 2px solid #daa520;
 }
 
 .rank-normal {
-  display: inline-block; min-width: 20px; padding: 1px 4px; margin-right: 5px; font-size: 12px;
-  border-radius: 6px; font-weight: normal; color: white; background-color: transparent;
+  display: inline-block; min-width: 24px; padding: 2px 6px; margin-right: 8px;
+  border-radius: 8px; font-weight: normal; color: white; background-color: transparent;
   border: none; vertical-align: middle;
 }
 
 .philanthrop-level {
   position: relative; display: inline-block; background: gold; color: black;
-  font-weight: bold; padding: 1px 4px; margin-left: 3px; border-radius: 5px;
-  cursor: help; font-size: 11px;
+  font-weight: bold; padding: 2px 6px; margin-left: 5px; border-radius: 5px;
+  cursor: help; font-size: 12px;
 }
 .philanthrop-level:hover { background: orange; }
 
@@ -212,22 +210,13 @@ button:hover { background-color: #8e44ad; }
 canvas#fireworks { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
 
 .ads-section-wrapper {
-  margin: 20px auto; max-width: 900px; background: rgba(0, 0, 0, 0.4);
-  padding: 15px; border-radius: 12px; border: 2px solid rgba(255, 255, 255, 0.2);
+  margin: 40px auto; max-width: 1200; background: rgba(0, 0, 0, 0.4);
+  padding: 20px; border-radius: 12px; border: 2px solid rgba(255, 255, 255, 0.2);
 }
 .ads-section-title { text-align: center; font-size: 22px; margin-bottom: 20px; color: #fff; }
 .ads-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* ровно 2 карточки в ряд */
-  gap: 20px;
-  margin-top: 10px;
-  perspective: 1000px;
-  justify-items: center; /* центрируем карточки */
-}
-@media (max-width: 768px) {
-  .ads-container {
-    grid-template-columns: 1fr; /* по одному объявлению в ряд */
-  }
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  margin-top: 10px; perspective: 1000px;
 }
 .ad-card {
   cursor: pointer;
@@ -242,44 +231,36 @@ canvas#fireworks { position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
 }
 .ad-card-inner {
   position: relative;
-  width: 100%;       /* занимает всю ширину ячейки */
-  max-width: 300px;  /* ограничение ширины карточки */
-  height: 320px;     /* фиксированная высота */
+  width: 280px;
+  height: 280px;
   text-align: center;
   transition: transform 0.8s;
   transform-style: preserve-3d;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  display: inline-block;
 }
-.ad-card.flipped .ad-card-inner { transform: rotateY(180deg);
-}
-.ad-card-front,
-.ad-card-back {
+.ad-card.flipped .ad-card-inner { transform: rotateY(180deg); }
+.ad-card-front, .ad-card-back {
   position: absolute;
   width: 100%;
-  height: 100%;
   backface-visibility: hidden;
   border-radius: 10px;
   overflow: hidden;
 }
-.ad-card-front {
-  background: rgba(0,0,0,0.4);
+.ad-card-front { height: 280px; width: 280px;}
+.ad-card-back {
+  background: #333;
+  color: #fff;
+  transform: rotateY(180deg);
+  padding: 20px;
+  box-sizing: border-box;
+  min-height: 280px;
+  width: 280px;
 }
+.ad-image { width: 100%; height: 200px; object-fit: cover; border-bottom: 2px solid rgba(255, 255, 255, 0.2); }
+.ad-description { padding: 15px; font-size: 16px; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
 
-.ad-image { width: 100%; height: 150px; object-fit: cover; border-bottom: 2px solid rgba(255, 255, 255, 0.2); }
-.ad-description {
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  font-size: 15px;
-  background: rgba(0, 0, 0, 0.4); /* легкий фон под текстом */
-  color: white;
-}
 .ad-form-wrapper {
   margin-top: 30px;
   background: rgba(255, 255, 255, 0.1);
@@ -346,26 +327,17 @@ canvas#fireworks { position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
   position: relative;
 }
 .ad-card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: 10px;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 20px;
   background: linear-gradient(135deg, #444, #222);
   color: white;
+  border-radius: 10px;
+  min-height: 280px;
   box-sizing: border-box;
-  transform: rotateY(180deg);
 }
-@media (max-width: 768px) {
-  .ads-container {
-    grid-template-columns: 1fr; /* одна карточка на ряд */
-  }
-}
+
 .ad-card-back h3 {
   margin-top: 0;
   margin-bottom: 10px;
