@@ -134,11 +134,11 @@ input[type="number"] {
   margin-right: 10px; width: 200px;
 }
 button {
-  padding: 10px 20px; background-color: #9b59b6; border: none;
+  padding: 10px 20px; background-color: #7e23a2; border: none;
   border-radius: 6px; color: white; font-size: 16px; cursor: pointer;
   transition: background 0.3s ease;
 }
-button:hover { background-color: #8e44ad; }
+button:hover { background-color: #bc93cd; }
 
 #donate-success-message {
   position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
