@@ -39,7 +39,7 @@ body {
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.container form button:hover {
+.container form button:hover  {
   background-color: #8e44ad;
   transform: scale(1.05);
 }
@@ -354,4 +354,4 @@ canvas#fireworks { position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
   display: flex;
   justify-content: space-around;
   margin-top: 15px;
-}
+    }
