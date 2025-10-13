@@ -115,10 +115,7 @@
 
     #forgot-link { display: none; }
 
-    #message {
-      margin-top: 10px;
-      font-weight: bold;
-    }
+    
   </style>
 </head>
 <body>
@@ -138,12 +135,11 @@
   <div id="container">
     <h2>Login</h2>
     <form id="login-form" novalidate>
-      <input type="text" id="username" name="username" placeholder="Username" required />
+      <input type="text" id="username" name="username" placeholder="Username" required > 
       <input type="password" id="password" name="password" placeholder="Password" required />
       <input type="hidden" id="csrf_token" name="csrf_token" value="{{ csrf_token }}">
       <button type="submit">Log In</button>
     </form>
-    <p id="message"></p>
     <a href="/auth/register" class="link-button" id="register-link">No account? Register</a>
     <a href="/auth/forgot-password" class="link-button" id="forgot-link">Forgot password?</a>
   </div>
