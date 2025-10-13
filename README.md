@@ -40,3 +40,4 @@ cd <project_folder>
 3-Install dependencies
  pip install -r requirements.txt
 
+![Stephoto](images/1.png)
