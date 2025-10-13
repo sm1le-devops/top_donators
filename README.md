@@ -26,7 +26,7 @@ MyFastAPIApp is a FastAPI web application with support for user registration and
 - Docker (optional for containerization)
 - Ngrok (for local webhook)
 - Uvicorn (ASGI server)
-
+![Stephoto](images/1.png)
 ## Installation and Running
 
 ### 1. Clone the repository
@@ -40,4 +40,4 @@ cd <project_folder>
 3-Install dependencies
  pip install -r requirements.txt
 
-![Stephoto](images/1.png)
+
