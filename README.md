@@ -27,6 +27,7 @@ MyFastAPIApp is a FastAPI web application with support for user registration and
 - Ngrok (for local webhook)
 - Uvicorn (ASGI server)
 ![Stephoto](images/1.png)
+![Stephoto](images/2.png)
 ## Installation and Running
 
 ### 1. Clone the repository
